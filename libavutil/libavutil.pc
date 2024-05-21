@@ -1,0 +1,14 @@
+prefix=/home/zxf/桌面/study/1_ffmpeg/ffmpeg_build
+exec_prefix=${prefix}
+libdir=/home/zxf/桌面/study/1_ffmpeg/ffmpeg_build/lib
+includedir=/home/zxf/桌面/study/1_ffmpeg/ffmpeg_build/include
+
+Name: libavutil
+Description: FFmpeg utility library
+Version: 58.2.100
+Requires: 
+Requires.private: 
+Conflicts:
+Libs: -L${libdir}  -lavutil 
+Libs.private: -pthread -lva-drm -lva -lva-x11 -lva -lvdpau -lX11 -lm -lva -latomic -lX11 -lpthread -lxcb -lXau -lXdmcp
+Cflags: -I${includedir}

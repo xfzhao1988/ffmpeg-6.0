@@ -1,0 +1,23 @@
+PATH="$mydir/bin:$PATH" PKG_CONFIG_PATH="$mydir/ffmpeg_build/lib/pkgconfig" CFLAGS="-O3 -fPIC" ./configure \
+  --prefix="$mydir/ffmpeg_build" \
+  --pkg-config-flags="--static" \
+  --extra-cflags="-I$mydir/ffmpeg_build/include" \
+  --extra-ldflags="-L$mydir/ffmpeg_build/lib" \
+  --extra-libs="-lpthread -lm" \
+  --bindir="$mydir/bin" \
+  --enable-gpl \
+  --enable-libass \
+  --enable-libfdk-aac \
+  --enable-libfreetype \
+  --enable-libmp3lame \
+  --enable-libvorbis \
+  --enable-libvpx \
+  --enable-libx264 \
+  --enable-libx265 \
+  --enable-pic \
+  --enable-shared   \
+  --enable-openssl \
+  --enable-nonfree && \
+PATH="$mydir/bin:$PATH" make && \
+make install && \
+hash -r

@@ -1,0 +1,14 @@
+prefix=/home/zxf/桌面/study/1_ffmpeg/ffmpeg_build
+exec_prefix=${prefix}
+libdir=/home/zxf/桌面/study/1_ffmpeg/ffmpeg_build/lib
+includedir=/home/zxf/桌面/study/1_ffmpeg/ffmpeg_build/include
+
+Name: libavdevice
+Description: FFmpeg device handling library
+Version: 60.1.100
+Requires: 
+Requires.private: libavfilter >= 9.3.100, libswscale >= 7.1.100, libpostproc >= 57.1.100, libavformat >= 60.3.100, libavcodec >= 60.3.100, libswresample >= 4.10.100, libavutil >= 58.2.100
+Conflicts:
+Libs: -L${libdir}  -lavdevice 
+Libs.private: -lm -latomic -lxcb -lXau -lXdmcp -lxcb-shm -lxcb -lXau -lXdmcp -lxcb-shape -lxcb -lXau -lXdmcp -lxcb-xfixes -lxcb-render -lxcb-shape -lxcb -lXau -lXdmcp -lasound -lm -ldl -lpthread -lrt -lSDL2 -lm -lasound -lm -ldl -lpthread -lpulse-simple -pthread -lpulse -pthread -lX11 -lXext -lXcursor -lXinerama -lXi -lXfixes -lXrandr -lXss -lXxf86vm -ldrm -lgbm -lwayland-egl -lwayland-client -lwayland-cursor -lxkbcommon -ldecor-0 -lpthread -lrt -lsndio -lXv -lXext -lX11 -lpthread -lxcb -lXau -lXdmcp -lX11 -lpthread -lxcb -lXau -lXdmcp -lXext -lX11 -lpthread -lxcb -lXau -lXdmcp
+Cflags: -I${includedir}

@@ -1,0 +1,14 @@
+prefix=/home/zxf/桌面/study/1_ffmpeg/ffmpeg_build
+exec_prefix=${prefix}
+libdir=/home/zxf/桌面/study/1_ffmpeg/ffmpeg_build/lib
+includedir=/home/zxf/桌面/study/1_ffmpeg/ffmpeg_build/include
+
+Name: libswscale
+Description: FFmpeg image rescaling library
+Version: 7.1.100
+Requires: 
+Requires.private: libavutil >= 58.2.100
+Conflicts:
+Libs: -L${libdir}  -lswscale 
+Libs.private: -lm -latomic
+Cflags: -I${includedir}

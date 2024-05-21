@@ -1,0 +1,14 @@
+prefix=/home/zxf/Ê°åÈù¢/study/1_ffmpeg/ffmpeg_build
+exec_prefix=${prefix}
+libdir=/home/zxf/Ê°åÈù¢/study/1_ffmpeg/ffmpeg_build/lib
+includedir=/home/zxf/Ê°åÈù¢/study/1_ffmpeg/ffmpeg_build/include
+
+Name: libavcodec
+Description: FFmpeg codec library
+Version: 60.3.100
+Requires: 
+Requires.private: libswresample >= 4.10.100, libavutil >= 58.2.100
+Conflicts:
+Libs: -L${libdir}  -lavcodec 
+Libs.private: -L/home/zxf/\Ê\°\å\È\ù\¢/study/1_ffmpeg/ffmpeg_build/lib -lvpx -lm -lpthread -L/home/zxf/\Ê\°\å\È\ù\¢/study/1_ffmpeg/ffmpeg_build/lib -lvpx -lm -lpthread -L/home/zxf/\Ê\°\å\È\ù\¢/study/1_ffmpeg/ffmpeg_build/lib -lvpx -lm -lpthread -L/home/zxf/\Ê\°\å\È\ù\¢/study/1_ffmpeg/ffmpeg_build/lib -lvpx -lm -lpthread -pthread -lm -latomic -L/home/zxf/\Ê\°\å\È\ù\¢/study/1_ffmpeg/ffmpeg_build/lib -lfdk-aac -lm -lmp3lame -lm -lvorbis -lm -logg -lvorbisenc -lvorbis -lm -logg -L/home/zxf/\Ê\°\å\È\ù\¢/study/1_ffmpeg/ffmpeg_build/lib -lx264 -lpthread -lm -ldl -L/home/zxf/\Ê\°\å\È\ù\¢/study/1_ffmpeg/ffmpeg_build/lib -lx265 -lstdc++ -lm -lgcc_s -lgcc -lgcc_s -lgcc -lrt -ldl -lnuma -lz -lva
+Cflags: -I${includedir}

@@ -1,0 +1,14 @@
+prefix=/home/zxf/桌面/study/1_ffmpeg/ffmpeg_build
+exec_prefix=${prefix}
+libdir=/home/zxf/桌面/study/1_ffmpeg/ffmpeg_build/lib
+includedir=/home/zxf/桌面/study/1_ffmpeg/ffmpeg_build/include
+
+Name: libswresample
+Description: FFmpeg audio resampling library
+Version: 4.10.100
+Requires: 
+Requires.private: libavutil >= 58.2.100
+Conflicts:
+Libs: -L${libdir}  -lswresample 
+Libs.private: -lm -latomic
+Cflags: -I${includedir}
