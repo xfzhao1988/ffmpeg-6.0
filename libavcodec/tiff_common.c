@@ -52,7 +52,38 @@ unsigned ff_tget_long(GetByteContext *gb, int le)
     return le ? bytestream2_get_le32(gb) : bytestream2_get_be32(gb);
 }
 
+/**
+这段代码是一个函数 ff_tget_double，用于从字节流中读取一个 double 类型的数值，并根据指定的字节序（大小端）进行读取。
 
+函数解析：
+
+函数名和参数：
+double ff_tget_double(GetByteContext *gb, int le)
+GetByteContext *gb 是一个指向字节流上下文的指针，用于读取字节数据。
+int le 是一个标志，表示是否使用小端字节序。如果 le 为真（非零），则使用小端字节序读取；否则使用大端字节序读取。
+
+变量声明：
+av_alias64 i = { .u64 = le ? bytestream2_get_le64(gb) : bytestream2_get_be64(gb)};
+av_alias64 是一个联合体，包含了多种数据类型，用于数据类型的转换。
+i 是一个 av_alias64 类型的变量，初始化为一个匿名联合体，根据 le 的值选择使用 bytestream2_get_le64(gb) 或
+bytestream2_get_be64(gb) 从字节流中读取一个 uint64_t 类型的整数。
+
+返回值：
+return i.f64;
+
+最后，函数返回联合体 i 中的 f64 成员，这是一个 double 类型的值。
+
+解释代码功能：
+bytestream2_get_le64(gb) 和 bytestream2_get_be64(gb) 是两个函数，分别用于从字节流中读取小端和大端格式的 uint64_t 类型整数。
+av_alias64 联合体的作用是通过 u64 成员来访问同一内存空间中的不同数据类型，这里用于将读取的整数转换为 double 类型。
+根据 le 参数的值，选择合适的字节序读取整数，并将其转换为 double 类型后返回。
+
+注意事项：
+代码假设 bytestream2_get_le64 和 bytestream2_get_be64 函数能够正确地从字节流中读取数据，并根据小端或大端格式返回正确的整数值。
+使用联合体 av_alias64 的方式，确保在读取整数后能够直接将其视为 double 类型，而无需显式地进行类型转换。
+
+这段代码适用于需要从字节流中解析 double 类型数据，并能够根据不同的字节序进行解析的情况。
+*/
 double ff_tget_double(GetByteContext *gb, int le)
 {
     av_alias64 i = { .u64 = le ? bytestream2_get_le64(gb) : bytestream2_get_be64(gb)};

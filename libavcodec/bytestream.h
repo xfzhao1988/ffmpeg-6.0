@@ -88,6 +88,76 @@ static av_always_inline type bytestream2_peek_ ## name(GetByteContext *g)      \
     return bytestream2_peek_ ## name ## u(g);                                  \
 }
 
+
+/**
+ * 举例：DEF(uint64_t,     le64, 8, AV_RL64, AV_WL64)如下
+ *
+ * uint8_t buff[256] = {0};
+ * uint8_t *pbuf = &buff;
+ *
+ * static av_always_inline uint64_t bytestream_get_le64(const uint8_t **b)
+ * {
+ *      (*b) += 8;
+ *      return AV_RL64(*b - 8);
+ * }
+ *
+ * static av_always_inline void bytestream_put_le64(uint8_t **b,
+ *                                                  const uint64_t value)
+ * {
+ *      AV_WL64(*b, value);
+ *      (*b) += 8;
+ * }
+ *
+ * static av_always_inline void bytestream2_put_le64u(PutByteContext *p,
+ *                                                    const uint64_t value)
+ * {
+ *      bytestream_put_le64(&p->buffer, value);
+ * }
+ *
+ * static av_always_inline void bytestream2_put_le64(PutByteContext *p,
+ *                                                   const uint64_t value)
+ * {
+ *      if (!p->eof && (p->buffer_end - p->buffer >= 8))
+ *      {
+ *          AV_WL64(p->buffer, value);
+ *          p->buffer += 8;
+ *      }
+ *      else
+ *      {
+ *          p->eof = 1;
+ *      }
+ * }
+ *
+ * static av_always_inline uint64_t bytestream2_get_le64u(GetByteContext *g)
+ * {
+ *      return bytestream_get_le64(&g->buffer);
+ * }
+ *
+ * static av_always_inline uint64_t bytestream2_get_le64(GetByteContext *g)
+ * {
+ *      if (g->buffer_end - g->buffer < 8)
+ *      {
+ *          g->buffer = g->buffer_end;
+ *          return 0;
+ *      }
+ *      return bytestream2_get_le64u(g);
+ * }
+ *
+ * static av_always_inline uint64_t bytestream2_peek_le64u(GetByteContext *g)
+ * {
+ *      return AV_RL64(g->buffer);
+ * }
+ *
+ * static av_always_inline uint64_t bytestream2_peek_le64(GetByteContext *g)
+ * {
+ *      if (g->buffer_end - g->buffer < 8)
+ *      {
+ *          return 0;
+ *      }
+ *      return bytestream2_peek_le64u(g);
+ * }
+*/
+//#define DEF(type, name, bytes, read, write)
 DEF(uint64_t,     le64, 8, AV_RL64, AV_WL64)
 DEF(unsigned int, le32, 4, AV_RL32, AV_WL32)
 DEF(unsigned int, le24, 3, AV_RL24, AV_WL24)
