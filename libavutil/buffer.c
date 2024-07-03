@@ -26,6 +26,7 @@
 #include "mem.h"
 #include "thread.h"
 
+//done
 static AVBufferRef *buffer_create(AVBuffer *buf, uint8_t *data, size_t size,
                                   void (*free)(void *opaque, uint8_t *data),
                                   void *opaque, int flags)
@@ -51,7 +52,7 @@ static AVBufferRef *buffer_create(AVBuffer *buf, uint8_t *data, size_t size,
 
     return ref;
 }
-
+//done
 AVBufferRef *av_buffer_create(uint8_t *data, size_t size,
                               void (*free)(void *opaque, uint8_t *data),
                               void *opaque, int flags)
@@ -68,12 +69,12 @@ AVBufferRef *av_buffer_create(uint8_t *data, size_t size,
     }
     return ret;
 }
-
+//done
 void av_buffer_default_free(void *opaque, uint8_t *data)
 {
     av_free(data);
 }
-
+//done
 AVBufferRef *av_buffer_alloc(size_t size)
 {
     AVBufferRef *ret = NULL;
@@ -108,7 +109,34 @@ AVBufferRef *av_buffer_ref(const AVBufferRef *buf)
         return NULL;
 
     *ret = *buf;
+/*
+这行代码是一个原子加法操作，用于增加 buf->buffer->refcount 的值。让我解释一下这段代码的含义和作用：
 
+代码解析
+atomic_fetch_add_explicit(&buf->buffer->refcount, 1, memory_order_relaxed);
+atomic_fetch_add_explicit：这是一个函数或宏，用于以指定的内存顺序（这里是 memory_order_relaxed，
+即松散的内存顺序）对指定的原子变量执行加法操作。
+
+&buf->buffer->refcount：这是一个指向原子变量 refcount 的指针，refcount 是一个计数器，
+通常用于跟踪引用该数据结构的线程数或者引用计数。
+
+1：这是要加上的值，即每次调用这个操作，refcount 的值会增加 1。
+
+memory_order_relaxed：这是指定的内存顺序，表示操作可以以任意顺序执行，不会引入额外的同步开销。
+在这种模式下，编译器和处理器可以对操作进行优化和重排序，但不会影响其他线程的操作结果。
+
+功能与用法
+功能：atomic_fetch_add_explicit 用于原子地将指定的值加到原子变量中，并返回之前的值。
+内存顺序：使用 memory_order_relaxed 意味着该加法操作可以被编译器和处理器以非常高效的方式执行，
+适合于不需要强顺序保证的情况下，如简单的计数器增加。
+
+示例用法
+假设 buf 是一个结构体指针，其中 buffer 是一个包含 refcount 的原子变量，可以这样使用：
+
+atomic_fetch_add_explicit(&buf->buffer->refcount, 1, memory_order_relaxed);
+
+这行代码将原子地将 buf->buffer->refcount 的值增加 1，使用了松散的内存顺序，确保了并发环境下的线程安全性和性能。
+*/
     atomic_fetch_add_explicit(&buf->buffer->refcount, 1, memory_order_relaxed);
 
     return ret;

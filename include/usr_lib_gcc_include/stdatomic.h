@@ -26,18 +26,13 @@ see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see
 #ifndef _STDATOMIC_H
 #define _STDATOMIC_H
 
-/**
- * @brief 这段代码定义了一个枚举类型 memory_order，用于表示 C++11 中的内存顺序（memory order）。
- * 具体来说：
- * memory_order_relaxed：这表示松散内存顺序，表示对原子操作的执行不会影响其他线程中的内存操作的执行顺序。
- * memory_order_consume：这表示消费内存顺序，用于在依赖于数据的值时，保证加载操作之后的读取操作在数据加载之后进行。
- * memory_order_acquire：这表示获取内存顺序，用于确保加载操作之前的读取操作在数据加载之前完成。
- * memory_order_release：这表示释放内存顺序，用于确保存储操作之后的写入操作在数据存储之后进行。
- * memory_order_acq_rel：这表示获取释放内存顺序，结合了获取和释放内存顺序的特性。
- * memory_order_seq_cst：这表示顺序一致内存顺序，是最严格的内存顺序，要求对原子操作的执行顺序遵循全局顺序。
- * 这个枚举类型用于在 C++11 中使用原子操作时指定内存顺序，以确保多线程程序的正确性。
- *
- */
+
+/*
+1. https://www.apiref.com/cpp-zh/c/atomic/memory_order.html
+2. 内存顺序问题:
+(1) 内存顺序问题（一）: https://www.toutiao.com/article/7121910792928330243/?app=news_article&timestamp=1720008569&use_new_style=1&req_id=20240703200929A5C7BB61E8C1E02A19D9&group_id=7121910792928330243&pseries_type=0&pseries_style_type=2&pseries_id=7128358909588668942&share_token=923d3171-cfac-422d-8c25-0d2546ff3af0&source=m_redirect
+
+*/
 typedef enum
   {
     memory_order_relaxed = __ATOMIC_RELAXED,
@@ -90,7 +85,39 @@ typedef _Atomic __UINTMAX_TYPE__ atomic_uintmax_t;
 
 #define ATOMIC_VAR_INIT(VALUE)	(VALUE)
 
-/* Initialize an atomic object pointed to by PTR with VAL.  */
+/* Initialize an atomic object pointed to by PTR with VAL. */
+/* 用 VAL 初始化 PTR 指向的原子对象。 */
+/*
+这段代码是一个宏定义，用于初始化原子变量。让我解释一下它的作用和具体实现：
+
+宏定义解析
+#define atomic_init(PTR, VAL) \
+  atomic_store_explicit(PTR, VAL, __ATOMIC_RELAXED)
+
+atomic_init(PTR, VAL)：这是一个宏，用于初始化原子变量。
+atomic_store_explicit(PTR, VAL, __ATOMIC_RELAXED)：
+atomic_store_explicit 是一个函数或宏，用于以特定的内存顺序（这里是 __ATOMIC_RELAXED，即松散的内存顺序）存储值。
+
+PTR 是指向原子变量的指针。
+VAL 是要存储的值。
+__ATOMIC_RELAXED 表示使用松散的内存顺序进行存储操作，即没有特定的顺序要求，操作可以被重排序。
+
+功能与用法
+功能：atomic_init 宏用于将 PTR 指向的原子变量初始化为 VAL。
+内存顺序：使用 __ATOMIC_RELAXED 内存顺序意味着该初始化操作可以被编译器优化和重排序，不会引入额外的同步开销，
+适用于不需要特定顺序保证的场景。
+
+示例用法
+假设有一个 atomic_int 类型的原子变量 my_atomic_var，可以这样初始化：
+
+atomic_int my_atomic_var;
+atomic_init(&my_atomic_var, 0);
+这将会使用宏定义展开为类似以下的代码：
+
+atomic_store_explicit(&my_atomic_var, 0, __ATOMIC_RELAXED);
+
+这确保了 my_atomic_var 变量被原子地初始化为 0，使用了松散的内存顺序，适合于大多数不需要强顺序保证的情况下。
+*/
 #define atomic_init(PTR, VAL)                           \
   atomic_store_explicit (PTR, VAL, __ATOMIC_RELAXED)
 

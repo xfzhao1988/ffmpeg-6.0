@@ -27,40 +27,47 @@
 
 /**
  * The buffer was av_realloc()ed, so it is reallocatable.
+ * 缓冲区是 av_realloc() 的，因此它是可重新分配的。
  */
 #define BUFFER_FLAG_REALLOCATABLE (1 << 0)
 /**
  * The AVBuffer structure is part of a larger structure
  * and should not be freed.
+ * AVBuffer 结构是更大结构的一部分，不应被释放。
  */
 #define BUFFER_FLAG_NO_FREE       (1 << 1)
 
 struct AVBuffer {
-    uint8_t *data; /**< data described by this buffer */
-    size_t size; /**< size of data in bytes */
+    uint8_t *data; /**< data described by this buffer 该缓冲区描述的数据 */
+    size_t size; /**< size of data in bytes 数据大小（以字节为单位） */
 
     /**
      *  number of existing AVBufferRef instances referring to this buffer
+     *  引用此缓冲区的现有 AVBufferRef 实例的数量
      */
     atomic_uint refcount;
 
     /**
      * a callback for freeing the data
+     * 释放数据的回调
      */
     void (*free)(void *opaque, uint8_t *data);
 
     /**
      * an opaque pointer, to be used by the freeing callback
+     * 一个不透明的指针，供释放回调使用
      */
     void *opaque;
 
     /**
      * A combination of AV_BUFFER_FLAG_*
+     * AV_BUFFER_FLAG_* 的组合
      */
     int flags;
 
     /**
      * A combination of BUFFER_FLAG_*
+     * BUFFER_FLAG_* 的组合
      */
     int flags_internal;
 };

@@ -20,6 +20,7 @@
  * @file
  * @ingroup lavu_buffer
  * refcounted data buffer API
+ * 引用计数数据缓冲区 API
  */
 
 #ifndef AVUTIL_BUFFER_H
@@ -34,6 +35,7 @@
  *
  * @{
  * AVBuffer is an API for reference-counted data buffers.
+ * AVBuffer 是引用计数数据缓冲区的 API。
  *
  * There are two core objects in this API -- AVBuffer and AVBufferRef. AVBuffer
  * represents the data buffer itself; it is opaque and not meant to be accessed
@@ -42,6 +44,10 @@
  * are describing the same data buffer. AVBufferRef represents a single
  * reference to an AVBuffer and it is the object that may be manipulated by the
  * caller directly.
+ * 此 API 中有两个核心对象 - AVBuffer 和 AVBufferRef。AVBuffer 表示数据缓冲区本身；
+ * 它是不透明的，不能由调用者直接访问，而只能通过 AVBufferRef 访问。但是，调用者可以比较
+ * 两个 AVBuffer 指针，以检查两个不同的引用是否描述相同的数据缓冲区。AVBufferRef 表示对
+ * AVBuffer 的单个引用，它是调用者可以直接操作的对象。
  *
  * There are two functions provided for creating a new AVBuffer with a single
  * reference -- av_buffer_alloc() to just allocate a new buffer, and
@@ -49,6 +55,9 @@
  * reference, additional references may be created with av_buffer_ref().
  * Use av_buffer_unref() to free a reference (this will automatically free the
  * data once all the references are freed).
+ * 有两个函数可用于创建具有单个引用的新 AVBuffer - av_buffer_alloc() 仅分配新缓冲区，
+ * av_buffer_create() 将现有数组包装在 AVBuffer 中。从现有引用，可以使用 av_buffer_ref()
+ * 创建其他引用。使用 av_buffer_unref() 释放引用（一旦释放所有引用，这将自动释放数据）。
  *
  * The convention throughout this API and the rest of FFmpeg is such that the
  * buffer is considered writable if there exists only one reference to it (and
@@ -58,27 +67,38 @@
  * Of course nothing prevents the calling code from violating this convention,
  * however that is safe only when all the existing references are under its
  * control.
+ * 此 API 和 FFmpeg 其余部分的惯例是，如果缓冲区仅存在一个引用（并且未将其标记为只读），
+ * 则认为该缓冲区可写。av_buffer_is_writable() 函数用于检查这是否属实，av_buffer_make_writable()
+ * 将在必要时自动创建一个新的可写缓冲区。当然，没有什么可以阻止调用代码违反此惯例，但只有当所有现有引用
+ * 都在其控制之下时，这才是安全的。
  *
  * @note Referencing and unreferencing the buffers is thread-safe and thus
  * may be done from multiple threads simultaneously without any need for
  * additional locking.
+ * 引用和取消引用缓冲区是线程安全的，因此可以同时从多个线程完成，而无需任何额外的锁定。
  *
  * @note Two different references to the same buffer can point to different
  * parts of the buffer (i.e. their AVBufferRef.data will not be equal).
+ * 对同一缓冲区的两个不同引用可以指向缓冲区的不同部分（即它们的 AVBufferRef.data 不会相等）。
  */
 
 /**
  * A reference counted buffer type. It is opaque and is meant to be used through
  * references (AVBufferRef).
+ * 引用计数缓冲区类型。它是不透明的，旨在通过引用 (AVBufferRef) 使用。
  */
+//done
 typedef struct AVBuffer AVBuffer;
 
 /**
  * A reference to a data buffer.
+ * 对数据缓冲区的引用。
  *
  * The size of this struct is not a part of the public ABI and it is not meant
  * to be allocated directly.
+ * 此结构的大小不属于公共 ABI 的一部分，并且不打算直接分配。
  */
+//done
 typedef struct AVBufferRef {
     AVBuffer *buffer;
 
@@ -86,47 +106,63 @@ typedef struct AVBufferRef {
      * The data buffer. It is considered writable if and only if
      * this is the only reference to the buffer, in which case
      * av_buffer_is_writable() returns 1.
+     * 数据缓冲区。当且仅当这是对缓冲区的唯一引用时，它才被视为可写，在这种情况下
+     * av_buffer_is_writable() 返回 1。
      */
     uint8_t *data;
     /**
      * Size of data in bytes.
+     * 数据大小（以字节为单位）。
      */
     size_t   size;
 } AVBufferRef;
 
 /**
  * Allocate an AVBuffer of the given size using av_malloc().
+ * 使用 av_malloc() 分配给定大小的 AVBuffer。
  *
  * @return an AVBufferRef of given size or NULL when out of memory
+ * 指定大小的 AVBufferRef，或内存不足时返回 NULL
  */
 AVBufferRef *av_buffer_alloc(size_t size);
 
 /**
  * Same as av_buffer_alloc(), except the returned buffer will be initialized
  * to zero.
+ * 与 av_buffer_alloc() 相同，但返回的缓冲区将被初始化为零。
  */
 AVBufferRef *av_buffer_allocz(size_t size);
 
 /**
  * Always treat the buffer as read-only, even when it has only one
  * reference.
+ * 始终将缓冲区视为只读，即使它只有一个引用。
  */
 #define AV_BUFFER_FLAG_READONLY (1 << 0)
 
 /**
  * Create an AVBuffer from an existing array.
+ * 从现有数组创建 AVBuffer。
  *
  * If this function is successful, data is owned by the AVBuffer. The caller may
  * only access data through the returned AVBufferRef and references derived from
  * it.
+ * 如果此函数成功，数据将归 AVBuffer 所有。调用者只能通过返回的 AVBufferRef 及其派生的引用来访问数据。
  * If this function fails, data is left untouched.
+ * 如果此函数失败，数据将保持不变。
  * @param data   data array
+ *               数据数组
  * @param size   size of data in bytes
+ *               数据大小（以字节为单位）
  * @param free   a callback for freeing this buffer's data
+ *               释放此缓冲区数据的回调
  * @param opaque parameter to be got for processing or passed to free
+ *               要获取以进行处理或传递给释放函数的参数
  * @param flags  a combination of AV_BUFFER_FLAG_*
+ *               AV_BUFFER_FLAG_* 的组合
  *
  * @return an AVBufferRef referring to data on success, NULL on failure.
+ *         成功时返回指向数据的 AVBufferRef，失败时返回 NULL。
  */
 AVBufferRef *av_buffer_create(uint8_t *data, size_t size,
                               void (*free)(void *opaque, uint8_t *data),
@@ -136,14 +172,17 @@ AVBufferRef *av_buffer_create(uint8_t *data, size_t size,
  * Default free callback, which calls av_free() on the buffer data.
  * This function is meant to be passed to av_buffer_create(), not called
  * directly.
+ * 默认释放回调，在缓冲区数据上调用 av_free()。此函数旨在传递给 av_buffer_create()，而不是直接调用。
  */
 void av_buffer_default_free(void *opaque, uint8_t *data);
 
 /**
  * Create a new reference to an AVBuffer.
+ * 创建对 AVBuffer 的新引用。
  *
  * @return a new AVBufferRef referring to the same AVBuffer as buf or NULL on
  * failure.
+ * 一个新的 AVBufferRef 引用与 buf 相同的 AVBuffer 或失败时为 NULL。
  */
 AVBufferRef *av_buffer_ref(const AVBufferRef *buf);
 
