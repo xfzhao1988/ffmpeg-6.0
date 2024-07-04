@@ -285,7 +285,9 @@ typedef _Atomic struct
 
 #define ATOMIC_FLAG_INIT	{ 0 }
 
-
+/*
+1. Volatile关键字的解释: https://www.runoob.com/w3cnote/c-volatile-keyword.html
+*/
 extern _Bool atomic_flag_test_and_set (volatile atomic_flag *);
 #define atomic_flag_test_and_set(PTR) 					\
 			__atomic_test_and_set ((PTR), __ATOMIC_SEQ_CST)
