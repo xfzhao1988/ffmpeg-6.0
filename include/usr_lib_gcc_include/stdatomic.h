@@ -22,17 +22,19 @@ see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see
 <http://www.gnu.org/licenses/>.  */
 
 /* ISO C11 Standard:  7.17  Atomics <stdatomic.h>.  */
-
+/*
+关于原子操作可参考如下链接：
+1. C语言标准翻译版7.17：ISOIEC 98992011(en)，https://mb9axv8j44.feishu.cn/file/KVaRbmr3noFHzAx2fWOceWOenrF
+2. 闲散文章：
+(1) 内存顺序问题（一）: https://www.toutiao.com/article/7121910792928330243/?app=news_article&timestamp=1720008569&use_new_style=1&req_id=20240703200929A5C7BB61E8C1E02A19D9&group_id=7121910792928330243&pseries_type=0&pseries_style_type=2&pseries_id=7128358909588668942&share_token=923d3171-cfac-422d-8c25-0d2546ff3af0&source=m_redirect
+(2) 内存顺序问题（二）https://www.toutiao.com/article/7121911379866698240/?channel=&source=search_tab
+3. memory_order解释中文版：https://www.apiref.com/cpp-zh/c/atomic/memory_order.html
+   memory_order解释英文版：https://en.cppreference.com/w/c/atomic/memory_order
+*/
 #ifndef _STDATOMIC_H
 #define _STDATOMIC_H
 
 
-/*
-1. https://www.apiref.com/cpp-zh/c/atomic/memory_order.html
-2. 内存顺序问题:
-(1) 内存顺序问题（一）: https://www.toutiao.com/article/7121910792928330243/?app=news_article&timestamp=1720008569&use_new_style=1&req_id=20240703200929A5C7BB61E8C1E02A19D9&group_id=7121910792928330243&pseries_type=0&pseries_style_type=2&pseries_id=7128358909588668942&share_token=923d3171-cfac-422d-8c25-0d2546ff3af0&source=m_redirect
-
-*/
 typedef enum
   {
     memory_order_relaxed = __ATOMIC_RELAXED,

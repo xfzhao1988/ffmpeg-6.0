@@ -157,6 +157,7 @@ static void buffer_replace(AVBufferRef **dst, AVBufferRef **src)
     if (atomic_fetch_sub_explicit(&b->refcount, 1, memory_order_acq_rel) == 1) {
         /* b->free below might already free the structure containing *b,
          * so we have to read the flag now to avoid use-after-free. */
+        /* 下面的 b->free 可能已经释放了包含 *b 的结构，所以我们现在必须读取标志以避免释放后使用。*/
         int free_avbuffer = !(b->flags_internal & BUFFER_FLAG_NO_FREE);
         b->free(b->opaque, b->data);
         if (free_avbuffer)

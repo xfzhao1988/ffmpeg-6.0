@@ -189,6 +189,7 @@ AVBufferRef *av_buffer_ref(const AVBufferRef *buf);
 /**
  * Free a given reference and automatically free the buffer if there are no more
  * references to it.
+ * 释放给定的引用，如果没有更多引用则自动释放缓冲区。
  *
  * @param buf the reference to be freed. The pointer is set to NULL on return.
  */
@@ -199,6 +200,8 @@ void av_buffer_unref(AVBufferRef **buf);
  * true if and only if buf is the only reference to the underlying AVBuffer).
  * Return 0 otherwise.
  * A positive answer is valid until av_buffer_ref() is called on buf.
+ * 如果调用者可以写入 buf 引用的数据，则返回 1（当且仅当 buf 是底层 AVBuffer 的唯一引用时，
+ * 此结果才为真）。否则返回 0。在 buf 上调用 av_buffer_ref() 之前，肯定的回答是有效的。
  */
 int av_buffer_is_writable(const AVBufferRef *buf);
 
