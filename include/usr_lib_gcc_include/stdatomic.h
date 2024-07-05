@@ -30,6 +30,7 @@ see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see
 (2) 内存顺序问题（二）https://www.toutiao.com/article/7121911379866698240/?channel=&source=search_tab
 3. memory_order解释中文版：https://www.apiref.com/cpp-zh/c/atomic/memory_order.html
    memory_order解释英文版：https://en.cppreference.com/w/c/atomic/memory_order
+4. C11标准的原子操作详解: https://github.com/zenny-chen/C11-atomic-operations-in-detail
 */
 #ifndef _STDATOMIC_H
 #define _STDATOMIC_H
