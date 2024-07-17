@@ -31,6 +31,7 @@ see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see
 3. memory_order解释中文版：https://www.apiref.com/cpp-zh/c/atomic/memory_order.html
    memory_order解释英文版：https://en.cppreference.com/w/c/atomic/memory_order
 4. C11标准的原子操作详解: https://github.com/zenny-chen/C11-atomic-operations-in-detail
+5. C++11新特性内存模型总结详解--一篇秒懂：https://www.cnblogs.com/bclshuai/p/15898116.html
 */
 #ifndef _STDATOMIC_H
 #define _STDATOMIC_H
@@ -46,7 +47,7 @@ typedef enum
     memory_order_seq_cst = __ATOMIC_SEQ_CST
   } memory_order;
 
-
+//done
 typedef _Atomic _Bool atomic_bool;
 typedef _Atomic char atomic_char;
 typedef _Atomic signed char atomic_schar;
@@ -85,7 +86,7 @@ typedef _Atomic __PTRDIFF_TYPE__ atomic_ptrdiff_t;
 typedef _Atomic __INTMAX_TYPE__ atomic_intmax_t;
 typedef _Atomic __UINTMAX_TYPE__ atomic_uintmax_t;
 
-
+//done
 #define ATOMIC_VAR_INIT(VALUE)	(VALUE)
 
 /* Initialize an atomic object pointed to by PTR with VAL. */
@@ -137,6 +138,54 @@ extern void atomic_signal_fence (memory_order);
 #define atomic_signal_fence(MO)	__atomic_signal_fence  (MO)
 #define atomic_is_lock_free(OBJ) __atomic_is_lock_free (sizeof (*(OBJ)), (OBJ))
 
+/**
+这些预定义宏（如 ATOMIC_BOOL_LOCK_FREE 等）是用来检查某种类型在目标平台上是否可以无锁（lock-free）
+地实现原子操作的。这些宏的值通常是 0、1 或 2：
+
+0：类型的原子操作不是无锁的。
+1：类型的原子操作可能是无锁的。
+2：类型的原子操作一定是无锁的。
+
+这些宏常用于编写跨平台代码，以确保在不同平台上类型的原子操作具有一致的行为。
+
+下面是一个使用这些宏的示例代码，它检查某些类型是否可以进行无锁的原子操作：
+
+#include <iostream>
+#include <atomic>
+
+int main() {
+    std::cout << "ATOMIC_BOOL_LOCK_FREE: " << ATOMIC_BOOL_LOCK_FREE << std::endl;
+    std::cout << "ATOMIC_CHAR_LOCK_FREE: " << ATOMIC_CHAR_LOCK_FREE << std::endl;
+    std::cout << "ATOMIC_CHAR16_T_LOCK_FREE: " << ATOMIC_CHAR16_T_LOCK_FREE << std::endl;
+    std::cout << "ATOMIC_CHAR32_T_LOCK_FREE: " << ATOMIC_CHAR32_T_LOCK_FREE << std::endl;
+    std::cout << "ATOMIC_WCHAR_T_LOCK_FREE: " << ATOMIC_WCHAR_T_LOCK_FREE << std::endl;
+    std::cout << "ATOMIC_SHORT_LOCK_FREE: " << ATOMIC_SHORT_LOCK_FREE << std::endl;
+    std::cout << "ATOMIC_INT_LOCK_FREE: " << ATOMIC_INT_LOCK_FREE << std::endl;
+    std::cout << "ATOMIC_LONG_LOCK_FREE: " << ATOMIC_LONG_LOCK_FREE << std::endl;
+    std::cout << "ATOMIC_LLONG_LOCK_FREE: " << ATOMIC_LLONG_LOCK_FREE << std::endl;
+    std::cout << "ATOMIC_POINTER_LOCK_FREE: " << ATOMIC_POINTER_LOCK_FREE << std::endl;
+
+    if (ATOMIC_INT_LOCK_FREE == 2) {
+        std::atomic<int> atomicInt(0);
+        int expected = 0;
+        if (atomicInt.compare_exchange_strong(expected, 1)) {
+            std::cout << "Atomic int operation is lock-free and successful." << std::endl;
+        }
+    } else {
+        std::cout << "Atomic int operation is not guaranteed to be lock-free." << std::endl;
+    }
+
+    return 0;
+}
+
+这个示例代码会输出每个宏的值，并检查 int 类型是否可以进行无锁的原子操作。如果 ATOMIC_INT_LOCK_FREE 的值为 2，
+则表示 int 类型的原子操作一定是无锁的，并尝试进行一次原子比较和交换操作。
+
+在实际使用中，你可以根据这些宏的值决定是否使用某种类型的原子操作，或者选择其他的同步机制（如互斥锁）
+来确保线程安全性。
+
+*/
+//done
 #define ATOMIC_BOOL_LOCK_FREE		__GCC_ATOMIC_BOOL_LOCK_FREE
 #define ATOMIC_CHAR_LOCK_FREE		__GCC_ATOMIC_CHAR_LOCK_FREE
 #define ATOMIC_CHAR16_T_LOCK_FREE	__GCC_ATOMIC_CHAR16_T_LOCK_FREE
@@ -167,7 +216,7 @@ extern void atomic_signal_fence (memory_order);
     __typeof__ (*__atomic_store_ptr) __atomic_store_tmp = (VAL);	\
     __atomic_store (__atomic_store_ptr, &__atomic_store_tmp, (MO));	\
   })
-
+//done
 #define atomic_store(PTR, VAL)				\
   atomic_store_explicit (PTR, VAL, __ATOMIC_SEQ_CST)
 
@@ -198,7 +247,7 @@ extern void atomic_signal_fence (memory_order);
     __atomic_load (__atomic_load_ptr, &__atomic_load_tmp, (MO));	\
     __atomic_load_tmp;							\
   })
-
+//done
 #define atomic_load(PTR)  atomic_load_explicit (PTR, __ATOMIC_SEQ_CST)
 
 
@@ -212,7 +261,7 @@ extern void atomic_signal_fence (memory_order);
 		       &__atomic_exchange_tmp, (MO));			\
     __atomic_exchange_tmp;						\
   })
-
+//done
 #define atomic_exchange(PTR, VAL) 			\
   atomic_exchange_explicit (PTR, VAL, __ATOMIC_SEQ_CST)
 
@@ -227,7 +276,7 @@ extern void atomic_signal_fence (memory_order);
 			       &__atomic_compare_exchange_tmp, 0,	\
 			       (SUC), (FAIL));				\
   })
-
+//done
 #define atomic_compare_exchange_strong(PTR, VAL, DES) 			   \
   atomic_compare_exchange_strong_explicit (PTR, VAL, DES, __ATOMIC_SEQ_CST, \
 					   __ATOMIC_SEQ_CST)
@@ -242,39 +291,39 @@ extern void atomic_signal_fence (memory_order);
 			       &__atomic_compare_exchange_tmp, 1,	\
 			       (SUC), (FAIL));				\
   })
-
+//done
 #define atomic_compare_exchange_weak(PTR, VAL, DES)			\
   atomic_compare_exchange_weak_explicit (PTR, VAL, DES, __ATOMIC_SEQ_CST, \
 					 __ATOMIC_SEQ_CST)
 
 
-
+//done
 #define atomic_fetch_add(PTR, VAL) __atomic_fetch_add ((PTR), (VAL), 	\
 						       __ATOMIC_SEQ_CST)
 #define atomic_fetch_add_explicit(PTR, VAL, MO) 			\
 			  __atomic_fetch_add ((PTR), (VAL), (MO))
-
+//done
 #define atomic_fetch_sub(PTR, VAL) __atomic_fetch_sub ((PTR), (VAL), 	\
 						       __ATOMIC_SEQ_CST)
 #define atomic_fetch_sub_explicit(PTR, VAL, MO) 			\
 			  __atomic_fetch_sub ((PTR), (VAL), (MO))
-
+//done
 #define atomic_fetch_or(PTR, VAL) __atomic_fetch_or ((PTR), (VAL), 	\
 						       __ATOMIC_SEQ_CST)
 #define atomic_fetch_or_explicit(PTR, VAL, MO) 			\
 			  __atomic_fetch_or ((PTR), (VAL), (MO))
-
+//done
 #define atomic_fetch_xor(PTR, VAL) __atomic_fetch_xor ((PTR), (VAL), 	\
 						       __ATOMIC_SEQ_CST)
 #define atomic_fetch_xor_explicit(PTR, VAL, MO) 			\
 			  __atomic_fetch_xor ((PTR), (VAL), (MO))
-
+//done
 #define atomic_fetch_and(PTR, VAL) __atomic_fetch_and ((PTR), (VAL), 	\
 						       __ATOMIC_SEQ_CST)
 #define atomic_fetch_and_explicit(PTR, VAL, MO) 			\
 			  __atomic_fetch_and ((PTR), (VAL), (MO))
 
-
+//done
 typedef _Atomic struct
 {
 #if __GCC_ATOMIC_TEST_AND_SET_TRUEVAL == 1
@@ -283,12 +332,13 @@ typedef _Atomic struct
   unsigned char __val;
 #endif
 } atomic_flag;
-
+//done
 #define ATOMIC_FLAG_INIT	{ 0 }
 
 /*
 1. Volatile关键字的解释: https://www.runoob.com/w3cnote/c-volatile-keyword.html
 */
+//done
 extern _Bool atomic_flag_test_and_set (volatile atomic_flag *);
 #define atomic_flag_test_and_set(PTR) 					\
 			__atomic_test_and_set ((PTR), __ATOMIC_SEQ_CST)
