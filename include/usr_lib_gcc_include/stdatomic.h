@@ -24,14 +24,22 @@ see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see
 /* ISO C11 Standard:  7.17  Atomics <stdatomic.h>.  */
 /*
 关于原子操作可参考如下链接：
+文档链接：
 1. C语言标准翻译版7.17：ISOIEC 98992011(en)，https://mb9axv8j44.feishu.cn/file/KVaRbmr3noFHzAx2fWOceWOenrF
-2. 闲散文章：
+2. 闲散文章：重要
 (1) 内存顺序问题（一）: https://www.toutiao.com/article/7121910792928330243/?app=news_article&timestamp=1720008569&use_new_style=1&req_id=20240703200929A5C7BB61E8C1E02A19D9&group_id=7121910792928330243&pseries_type=0&pseries_style_type=2&pseries_id=7128358909588668942&share_token=923d3171-cfac-422d-8c25-0d2546ff3af0&source=m_redirect
 (2) 内存顺序问题（二）https://www.toutiao.com/article/7121911379866698240/?channel=&source=search_tab
 3. memory_order解释中文版：https://www.apiref.com/cpp-zh/c/atomic/memory_order.html
    memory_order解释英文版：https://en.cppreference.com/w/c/atomic/memory_order
 4. C11标准的原子操作详解: https://github.com/zenny-chen/C11-atomic-operations-in-detail
 5. C++11新特性内存模型总结详解--一篇秒懂：https://www.cnblogs.com/bclshuai/p/15898116.html
+6. compiler explorer: https://godbolt.org/
+7. https://cloud.tencent.com/developer/article/1638672：
+8. https://www.toutiao.com/article/7109778380631015968/?channel=&source=search_tab
+（1）https://mp.weixin.qq.com/s/t5_Up2YZEZt1NLbvgYz9FQ
+
+视频链接：
+1. https://www.bilibili.com/video/BV1Bz4y1Q7E1/?spm_id_from=333.337.search-card.all.click&vd_source=084acc4a762745f776be7fbf50285d56
 */
 #ifndef _STDATOMIC_H
 #define _STDATOMIC_H
