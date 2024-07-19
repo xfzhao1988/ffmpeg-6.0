@@ -31,12 +31,12 @@ see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see
 (2) 内存顺序问题（二）https://www.toutiao.com/article/7121911379866698240/?channel=&source=search_tab
 3. memory_order解释中文版：https://www.apiref.com/cpp-zh/c/atomic/memory_order.html
    memory_order解释英文版：https://en.cppreference.com/w/c/atomic/memory_order
-4. C11标准的原子操作详解: https://github.com/zenny-chen/C11-atomic-operations-in-detail
+4. C11标准的原子操作详解: https://github.com/zenny-chen/C11-atomic-operations-in-detail：重要
 5. C++11新特性内存模型总结详解--一篇秒懂：https://www.cnblogs.com/bclshuai/p/15898116.html
 6. compiler explorer: https://godbolt.org/
 7. https://cloud.tencent.com/developer/article/1638672：
-8. https://www.toutiao.com/article/7109778380631015968/?channel=&source=search_tab
-（1）https://mp.weixin.qq.com/s/t5_Up2YZEZt1NLbvgYz9FQ
+8. https://www.toutiao.com/article/7109778380631015968/?channel=&source=search_tab：重要
+（1）https://mp.weixin.qq.com/s/t5_Up2YZEZt1NLbvgYz9FQ：重要
 
 视频链接：
 1. https://www.bilibili.com/video/BV1Bz4y1Q7E1/?spm_id_from=333.337.search-card.all.click&vd_source=084acc4a762745f776be7fbf50285d56
